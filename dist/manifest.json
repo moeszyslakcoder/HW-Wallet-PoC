@@ -1,26 +1,27 @@
 {
-    "manifest_version": 2,
+  "manifest_version": 2,
 
-    "name": "Hash Works Browser Wallet",
-    "description":
-        "The browser wallet for Hash Works",
-    "version": "0.0.1",
+  "name": "Hash Works Browser Wallet",
+  "description": "The browser wallet for Hash Works",
+  "version": "0.0.1",
 
-    "browser_action": {
-        "default_icon": "icon128.png",
-        "default_popup": "popup.html"
-    },
+  "browser_action": {
+    "default_icon": "icon128.png",
+    "default_popup": "popup.html"
+  },
 
-    "background": {
-        "scripts": ["js/eventPage.js"],
-        "persistent": false
-    },
+  "background": {
+    "scripts": ["js/eventPage.js"],
+    "persistent": false
+  },
 
-    "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
-    },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
 
-    "permissions": []
+  "permissions": [],
+
+  "web_accessible_resources": ["fonts/*.woff"]
 }

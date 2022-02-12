@@ -28,9 +28,11 @@ module.exports = {
           },
           {
             loader: 'sass-loader', // Compiles Sass to CSS
+          },
+          {
+            loader: 'sass-resources-loader',
             options: {
-              data: '@import "src/global.scss";',
-              includePaths: [__dirname, 'src'],
+              resources: [`${__dirname}/src/global.scss`],
             },
           },
         ],

@@ -1,2 +1,78 @@
 $primary-color: #6d39ff;
+$secondary-color: #f4eefe;
 $background-color: #ffffff;
+
+// @font-face {
+//   font-family: Inter;
+//   src: url(/fonts/Inter-Bold.woff);
+//   font-weight: bold;
+// }
+// @font-face {
+//   font-family: Inter;
+//   src: url(/fonts/Inter-Medium.woff);
+//   font-weight: medium;
+// }
+// @font-face {
+//   font-family: Inter;
+//   src: url(/fonts/Inter-Regular.woff);
+//   font-weight: regular;
+// }
+
+body {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+p {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+}
+
+button,
+input[type='submit'] {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.7rem;
+  cursor: pointer;
+
+  background-color: $primary-color;
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+
+  &.tertiary {
+    background-color: transparent;
+    color: $primary-color;
+    box-shadow: none;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+input {
+  background-color: $secondary-color;
+  border: none;
+  padding: 0.85rem;
+  border-radius: 0.75rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+label {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  input {
+    display: block;
+  }
+}
