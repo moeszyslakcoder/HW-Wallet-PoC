@@ -36,7 +36,7 @@ export default function Popup() {
 
   const initialEntries = isVaultSetup
     ? [RoutePaths.UnlockWallet]
-    : [RoutePaths.CreateWallet]
+    : [RoutePaths.Welcome]
 
   return (
     <div className="popupContainer">
