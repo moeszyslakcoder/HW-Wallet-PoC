@@ -2,21 +2,21 @@ $primary-color: #6d39ff;
 $secondary-color: #f4eefe;
 $background-color: #ffffff;
 
-// @font-face {
-//   font-family: Inter;
-//   src: url(/fonts/Inter-Bold.woff);
-//   font-weight: bold;
-// }
-// @font-face {
-//   font-family: Inter;
-//   src: url(/fonts/Inter-Medium.woff);
-//   font-weight: medium;
-// }
-// @font-face {
-//   font-family: Inter;
-//   src: url(/fonts/Inter-Regular.woff);
-//   font-weight: regular;
-// }
+@font-face {
+  font-family: Inter;
+  src: url(/src/fonts/Inter-Bold.woff);
+  font-weight: bold;
+}
+@font-face {
+  font-family: Inter;
+  src: url(/src/fonts/Inter-Medium.woff);
+  font-weight: medium;
+}
+@font-face {
+  font-family: Inter;
+  src: url(/src/fonts/Inter-Regular.woff);
+  font-weight: regular;
+}
 
 body {
   font-family: Inter, Arial, Helvetica, sans-serif;
