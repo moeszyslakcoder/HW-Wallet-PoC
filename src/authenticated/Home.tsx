@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react'
-import { useObservable } from '@ngneat/use-observable'
-import { Chain, chains$, watchChainStoreStatus } from '../data/chains'
-import { fetchChains } from '../data/chains'
+import React, { Suspense } from 'react'
+import { useAtom } from 'jotai'
 import './Home.scss'
-import {
-  accountInfoByIds$,
-  fetchAccountInfo,
-  watchAccountInfoStoreStatus,
-} from '../data/accountInfo'
+import { Chain, chainsAtom } from '../data/chains'
+import { AccountInfo, accountInfoAtom } from '../data/accountinfo'
 
 const AccountInfo = ({
   chainId,
@@ -16,21 +11,19 @@ const AccountInfo = ({
   chainId: string
   accountId: string
 }) => {
-  useEffect(() => {
-    fetchAccountInfo({
-      chainId: chainId,
+  const [accountInfoResponse] = useAtom(
+    accountInfoAtom({
+      chainId,
       accountId,
-    }).subscribe()
-  }, [chainId, accountId])
+    }),
+  )
+  console.log('accountInfo', accountInfoResponse)
 
-  const [{ value: status }] = useObservable(watchAccountInfoStoreStatus)
-  const [accountInfo] = useObservable(accountInfoByIds$(chainId, accountId))
-  console.log('accountinfo status', status)
-  console.log('accountInfo', accountInfo)
-
-  if (!accountInfo || !accountInfo.accountId) {
+  if (!accountInfoResponse || accountInfoResponse.hasOwnProperty('error')) {
     return null
   }
+
+  const accountInfo = accountInfoResponse as AccountInfo
 
   return (
     <p>{`balance: ${accountInfo.balance.amount} ${accountInfo.balance.currency}`}</p>
@@ -50,25 +43,33 @@ const ChainElement = ({ chain }: { chain: Chain }) => {
           {network.servers.map((server) => (
             <p>{`${server.host} status: ${server.status} (${server.lastCheck})`}</p>
           ))}
-          <AccountInfo chainId={chain.chainId} accountId={accountId} />
+          <Suspense fallback="Loading...">
+            <AccountInfo chainId={chain.chainId} accountId={accountId} />
+          </Suspense>
         </>
       ))}
     </div>
   )
 }
-export default function Home() {
-  const [chains] = useObservable(chains$)
-  const [{ value: status }] = useObservable(watchChainStoreStatus)
-  useEffect(() => {
-    fetchChains().subscribe()
-  }, [])
+
+const ChainsList = () => {
+  const [chains] = useAtom(chainsAtom)
   return (
-    <div className="container">
-      <h2>Available Chains</h2>
-      {status === 'success' ? undefined : '...loading'}
+    <>
       {chains.map((chain) => (
         <ChainElement key={chain.chainId} chain={chain} />
       ))}
+    </>
+  )
+}
+
+export default function Home() {
+  return (
+    <div className="container">
+      <h2>Available Chains</h2>
+      <Suspense fallback="Loading...">
+        <ChainsList />
+      </Suspense>
     </div>
   )
 }

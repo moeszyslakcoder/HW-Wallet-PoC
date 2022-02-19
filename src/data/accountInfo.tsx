@@ -1,18 +1,6 @@
-import { Store, createState, withProps, select } from '@ngneat/elf'
-import {
-  withEntities,
-  selectAll,
-  selectEntityByPredicate,
-  addEntities,
-} from '@ngneat/elf-entities'
-import { fromFetch } from 'rxjs/fetch'
-import { tap } from 'rxjs/operators'
-import {
-  withRequestsStatus,
-  selectRequestStatus,
-  createRequestsStatusOperator,
-  updateRequestStatus,
-} from '@ngneat/elf-requests'
+import { atom, Atom } from 'jotai'
+import { atomFamily } from 'jotai/utils'
+import axios from 'axios'
 
 interface Balance {
   amount: string
@@ -40,51 +28,38 @@ export interface AccountInfo {
   }[]
 }
 
-const { state, config } = createState(
-  withEntities<AccountInfo, 'accountId'>({ idKey: 'accountId' }),
-  withRequestsStatus<'accountinfos'>(),
-)
-
-const accountInfosStore = new Store({ name: 'accountinfos', state, config })
-
-export const watchAccountInfoStoreStatus = accountInfosStore.pipe(
-  selectRequestStatus('accountinfos', { groupKey: '' }),
-)
-
-watchAccountInfoStoreStatus.subscribe((status) => {
-  console.log('accountinfo status', status)
-})
-
-export const accountInfoByIds$ = (chainId: string, accountId: string) =>
-  accountInfosStore.pipe(
-    selectEntityByPredicate(
-      ({ accountId: thisAccountId, chainId: thisChainId }) =>
-        thisAccountId === accountId && thisChainId === chainId,
-    ),
-  )
-
-export const trackAccountInfosRequestsStatus = createRequestsStatusOperator(
-  accountInfosStore,
-)
-
-export const setAccountInfos = (accountInfos: AccountInfo[]) =>
-  accountInfosStore.update(
-    addEntities(accountInfos),
-    updateRequestStatus('accountinfos', 'success'),
-  )
-
-export const fetchAccountInfo = ({
-  chainId,
-  accountId,
-}: {
+interface AccountParams {
   chainId: string
   accountId: string
-}) => {
-  console.log('fetchAccountInfo')
-  return fromFetch<AccountInfo[]>(
-    `https://api.keyconnect.app/v1/blockchains/${chainId}/accounts/${accountId}`,
-    {
-      selector: (response) => response.json(),
-    },
-  ).pipe(tap(setAccountInfos), trackAccountInfosRequestsStatus('accountinfos'))
 }
+
+interface AccountInfoError {
+  timestamp: number
+  status: number
+  error: string
+  message: string
+  path: string
+}
+
+type AccountInfoResponse = AccountInfo | AccountInfoError
+
+export const accountInfoAtom = atomFamily<
+  AccountParams,
+  Atom<AccountInfoResponse>
+>(
+  ({ chainId, accountId }) =>
+    // @ts-ignore
+    atom<AccountInfoResponse>(async (get) => {
+      console.log('fetching account info')
+      try {
+        const response = await axios.get(
+          `https://api.keyconnect.app/v1/blockchains/${chainId}/accounts/${accountId}`,
+        )
+        return response.data as AccountInfo
+      } catch (err) {
+        console.log(err.response.data)
+        return err.response.data
+      }
+    }),
+  (a, b) => a.chainId === b.chainId && a.accountId === b.accountId,
+)
