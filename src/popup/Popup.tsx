@@ -49,10 +49,10 @@ const LockedRoute = () => {
 // }
 
 export default function Popup() {
-  useEffect(() => {
-    // Example of how to send a message to eventPage.ts.
-    chrome.runtime.sendMessage({ popupMounted: true })
-  }, [])
+  // useEffect(() => {
+  //   // Example of how to send a message to eventPage.ts.
+  //   chrome.runtime.sendMessage({ popupMounted: true })
+  // }, [])
 
   const [isVaultSetup] = useObservable(isVaultSetup$)
   const [isVaultUnlocked] = useObservable(isVaultUnlocked$)

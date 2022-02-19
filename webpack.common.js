@@ -1,9 +1,22 @@
 const path = require('path')
+const webpack = require('webpack')
+const CopyPlugin = require('copy-webpack-plugin')
+const isDevelopment = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   entry: {
-    popup: path.join(__dirname, 'src/popup/index.tsx'),
+    index: path.join(__dirname, 'src/entries/dev.tsx'),
+    popup: path.join(__dirname, 'src/entries/extension.tsx'),
     eventPage: path.join(__dirname, 'src/eventPage.ts'),
+  },
+  mode: isDevelopment ? 'development' : 'production',
+  devServer: {
+    hot: true,
+    port: 3000,
+    static: {
+      directory: 'public',
+    },
+    open: true,
   },
   output: {
     path: path.join(__dirname, 'dist/js'),
@@ -24,7 +37,7 @@ module.exports = {
             options: {
               name: '[name].[ext]',
               outputPath: 'fonts/',
-              publicPath: 'js/fonts',
+              publicPath: process.env.WEBPACK_SERVE ? 'fonts' : 'js/fonts',
             },
           },
         ],
@@ -55,4 +68,20 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        DEV_ACCOUNT_ID: JSON.stringify(process.env.DEV_ACCOUNT_ID),
+      },
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'public',
+          to: path.join(__dirname, 'dist'),
+          // toType: 'file',
+        },
+      ],
+    }),
+  ],
 }
