@@ -13,7 +13,7 @@ export default function CreateWallet() {
   unencryptedSeedPhrase$.subscribe((seedPhrase) => {
     console.log('seed phrase create update', seedPhrase)
     if (seedPhrase !== undefined && seedPhrase.length > 0) {
-      navigate(RoutePaths.SeedPhrase)
+      navigate(RoutePaths.Home)
     }
   })
 

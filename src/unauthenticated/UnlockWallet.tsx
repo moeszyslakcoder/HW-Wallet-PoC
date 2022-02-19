@@ -19,7 +19,7 @@ export default function UnlockWallet() {
   unencryptedSeedPhrase$.subscribe((seedPhrase) => {
     console.log('seed phrase unlock update', seedPhrase)
     if (seedPhrase !== undefined && seedPhrase.length > 0) {
-      navigate(RoutePaths.SeedPhrase)
+      navigate(RoutePaths.Home)
     }
   })
 
