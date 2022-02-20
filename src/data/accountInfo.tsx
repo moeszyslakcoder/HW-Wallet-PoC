@@ -57,7 +57,12 @@ export const accountInfoAtom = atomFamily<
         )
         return response.data as AccountInfo
       } catch (err) {
-        console.log(err.response.data)
+        if (!err.response) {
+          return {
+            error: 'no response',
+          }
+        }
+
         return err.response.data
       }
     }),

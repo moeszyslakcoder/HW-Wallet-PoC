@@ -5,7 +5,7 @@ import AddWallet from '../unauthenticated/AddWallet'
 import CreateWallet from '../unauthenticated/CreateWallet'
 import UnlockWallet from '../unauthenticated/UnlockWallet'
 import SeedPhrase from '../unauthenticated/SeedPhrase'
-import Home from '../authenticated/Home'
+import Home from '../authenticated/home/Home'
 import RoutePaths from '../shared/Routes'
 import {
   MemoryRouter as Router,
@@ -69,9 +69,9 @@ export default function Popup() {
           <Route path={RoutePaths.UnlockWallet} element={<SetupRoute />}>
             <Route path={RoutePaths.UnlockWallet} element={<UnlockWallet />} />
           </Route>
-          {/* <Route path={RoutePaths.Home} element={<LockedRoute />}> */}
-          <Route path={RoutePaths.Home} element={<Home />} />
-          {/* </Route> */}
+          <Route path={RoutePaths.Home} element={<LockedRoute />}>
+            <Route path={RoutePaths.Home} element={<Home />} />
+          </Route>
         </Routes>
       </Router>
     </div>

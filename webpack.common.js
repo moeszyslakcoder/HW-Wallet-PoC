@@ -43,6 +43,19 @@ module.exports = {
         ],
       },
       {
+        test: /\.(png|jpg|jpeg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/',
+              publicPath: 'assets',
+            },
+          },
+        ],
+      },
+      {
         exclude: /node_modules/,
         test: /\.scss$/,
         use: [
